@@ -1,6 +1,6 @@
 {
   "nodes": {
-    "home-manager": {
+    "home": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
@@ -39,7 +39,7 @@
     },
     "root": {
       "inputs": {
-        "home-manager": "home-manager",
+        "home": "home",
         "nixpkgs": "nixpkgs"
       }
     }

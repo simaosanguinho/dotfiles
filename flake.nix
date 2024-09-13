@@ -1,40 +1,48 @@
 {
   description = "Sanguinho's NixOS configuration";
 
-  inputs = {
+inputs = {
+    # The nixpkgs version to use.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    # home-manager, used for managing user configuration
-    home-manager = {
+
+    # The home-manager version to use.
+    home = {
       url = "github:nix-community/home-manager/release-24.05";
-      # The `follows` keyword in inputs is used for inheritance.
-      # Here, `inputs.nixpkgs` of home-manager is kept consistent with
-      # the `inputs.nixpkgs` of the current flake,
-      # to avoid problems caused by different versions of nixpkgs.
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, ... }: {
-    nixosConfigurations = {
-      # TODO please change the hostname to your own
-      solo = nixpkgs.lib.nixosSystem {
-        # system = "x86_64-linux"; # Not needed
-        modules = [
-          ./hosts/solo/default.nix
+  outputs = { ... }@inputs:
+    let
+      inherit (inputs.nixpkgs) lib;
+      inherit (builtins) listToAttrs attrNames readDir filter;
+      inherit (lib) hasSuffix;
+      inherit (inputs.nixpkgs.lib.filesystem) listFilesRecursive;
+      myLib = (import ./lib { inherit lib; }).myLib;
 
-          # make home-manager as a module of nixos
-          # so that home-manager configuration will be deployed automatically when executing `nixos-rebuild switch`
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
+      sshKeys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1lwuhiBZjUIzFikFCrzyp1jppOZSvlyc1/JZDvvqgD simao.sanguinho@gmail.com"
+      ];
 
-            home-manager.users.sanguinho = import ./home.nix;
+      # Imports every nix module from a directory, recursively.
+      mkModules = path: filter (hasSuffix ".nix") (listFilesRecursive path);
 
-            # Optionally, use home-manager.extraSpecialArgs to pass arguments to home.nix
-          }
-        ];
-      };
-    };
-  };
+      modules = myLib.rakeLeaves ./modules;
+
+      # Imports every host defined in a directory.
+      mkHosts = dir:
+        listToAttrs (map (name: {
+          inherit name;
+          value = inputs.nixpkgs.lib.nixosSystem {
+            specialArgs = { inherit inputs modules sshKeys; };
+            modules = [
+              { networking.hostName = name; }
+              { nixpkgs.config.allowUnfree = true; }
+              modules.core.sshd
+              inputs.home.nixosModules.home-manager
+              { home-manager = { useGlobalPkgs = true; }; }
+            ] ++ (mkModules "${dir}/${name}");
+          };
+        }) (attrNames (readDir dir)));
+    in { nixosConfigurations = mkHosts ./hosts; };
 }

@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, modules, inputs, ... }:
 
 {
   imports =
@@ -84,6 +84,20 @@
     # developer
     git
     vscode
+    docker-compose
+    mysql80
+
+    # media
+	  discord
+	  spotify
+    feh
+    flameshot
+
+    # misc
+    cowsay
+    file
+    which
+    tree
     
     # browsing
     brave
@@ -92,9 +106,18 @@
     bat
     neofetch
     ripgrep
-    vim
-    wget
-    curl
+    bat
+    glow
+    gnumake
+    tldr
+    fd
+    tmux
+
+    # system call monitoring
+    strace # system call monitoring
+    ltrace # library call monitoring
+    lsof # list open files
+
     ];
   };
 
@@ -136,6 +159,30 @@
     nodejs
   ];
 
+  home-manager.users.sanguinho = { pkgs, ... }: {
+    # The state version is required and should stay at the version you
+    # originally installed.
+    home.stateVersion = "24.05";
+
+    # Modules to import, available in the user's context.
+    imports = with modules;
+      [
+        # core
+        core.git
+        core.gitui
+
+        # shell
+        shell.zsh
+        shell.alacritty
+        shell.starship
+        shell.zoxide
+
+        # graphical
+        graphical.feh
+        graphical.flameshot
+
+      ];
+  };
 
 
   # This value determines the NixOS release from which the default
