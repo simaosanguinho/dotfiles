@@ -127,7 +127,7 @@
     steam-run
 
     # nix
-    nixfmt
+    nixfmt-classic
     nixpkgs-fmt
 
     # dev
