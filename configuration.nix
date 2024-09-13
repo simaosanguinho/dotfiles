@@ -17,10 +17,6 @@
   networking.hostName = "solo"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
   # Enable networking
   networking.networkmanager.enable = true;
 
@@ -41,14 +37,18 @@
     LC_TELEPHONE = "pt_PT.UTF-8";
     LC_TIME = "pt_PT.UTF-8";
   };
-  services.xserver.enable = true;
-  services.xserver.xkb.layout = "pt";
-  # Enable the Cinnamon Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.cinnamon.enable = true;
 
   # Configure console keymap
   console.keyMap = "pt-latin1";
+  services.xserver.enable = true;
+  services.xserver.xkb.layout = "pt";
+
+  # Enable the Flakes feature and the accompanying new nix command-line tool
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Enable the Cinnamon Desktop Environment.
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.cinnamon.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -64,14 +64,10 @@
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
 
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  services.libinput.enable = true;
- 	
+  # services.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.sanguinho = {
@@ -81,22 +77,24 @@
     openssh.authorizedKeys.keys = [
 	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1lwuhiBZjUIzFikFCrzyp1jppOZSvlyc1/JZDvvqgD simao.sanguinho@gmail.com"
     ];
-    packages = with pkgs; [
 
-	# developer
-	git
-	vscode
-	
-	# browsing
-	brave
-	
-	# dev tools
-	bat
-	neofetch
-	ripgrep
-	vim
-	wget
-	curl
+  # List of packages installed in the user environment
+  packages = with pkgs; [
+
+    # developer
+    git
+    vscode
+    
+    # browsing
+    brave
+    
+    # dev tools
+    bat
+    neofetch
+    ripgrep
+    vim
+    wget
+    curl
     ];
   };
 
@@ -117,34 +115,28 @@
     openFirewall = true;
   };
 
-  # Enable the Flakes feature and the accompanying new nix command-line tool
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # List of packages installed in system profile.
   environment.systemPackages = with pkgs; [
-  #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget
+    # core
+    vim
+    wget
+    curl
+
+    # mvn workaround
+    steam-run
+
+    # nix
+    nixfmt
+    nixpkgs-fmt
+
+    # dev
+    python3
+    dconf
+    nodejs
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
