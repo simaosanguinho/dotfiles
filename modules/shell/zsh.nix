@@ -4,7 +4,6 @@
   programs.zsh = {
     enable = true;
     shellAliases = {
-      ls = "eza";
       u = "sudo nixos-rebuild switch";
       cd = "z";
       ":q" = "exit";
@@ -15,7 +14,7 @@
       theme = "robbyrussell";
     };
     enableCompletion = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     autocd = true;
   };
 }
