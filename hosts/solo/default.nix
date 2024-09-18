@@ -77,7 +77,9 @@
     description = "sanguinho";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     openssh.authorizedKeys.keys = [
-	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1lwuhiBZjUIzFikFCrzyp1jppOZSvlyc1/JZDvvqgD simao.sanguinho@gmail.com"
+	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1lwuhiBZjUIzFikFCrzyp1jppOZSvlyc1/JZDvvqgD simao.sanguinho@gmail.com",
+  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILWB6jdzk/5YnfUDI7btHRVNg/hJ7IY85dOeK7xEzo19 simao.sanguinho@gmail.com"
+
     ];
 
   # List of packages installed in the user environment
