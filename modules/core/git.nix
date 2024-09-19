@@ -4,7 +4,7 @@
   programs.git = {
     enable = true;
     userName = "Simão Sanguinho";
-    userEmail = "simao.sanguinho@tecnico.ulisboa.pt";
+    userEmail = "simao.sanguinho@rnl.tecnico.ulisboa.pt";
     extraConfig = {
       color.ui = true;
       pull.rebase = true;
