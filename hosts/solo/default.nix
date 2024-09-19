@@ -54,6 +54,8 @@
   services.printing.enable = true;
 
   virtualisation.docker.enable = true;
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "sanguinho" ];
 
   # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
@@ -77,7 +79,7 @@
     description = "sanguinho";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     openssh.authorizedKeys.keys = [
-	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1lwuhiBZjUIzFikFCrzyp1jppOZSvlyc1/JZDvvqgD simao.sanguinho@gmail.com",
+	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1lwuhiBZjUIzFikFCrzyp1jppOZSvlyc1/JZDvvqgD simao.sanguinho@gmail.com"
   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILWB6jdzk/5YnfUDI7btHRVNg/hJ7IY85dOeK7xEzo19 simao.sanguinho@gmail.com"
 
     ];
@@ -121,6 +123,9 @@
     strace # system call monitoring
     ltrace # library call monitoring
     lsof # list open files
+
+    # agisit
+    vagrant
 
     ];
   };
