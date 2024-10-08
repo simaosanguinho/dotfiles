@@ -127,6 +127,9 @@
     # agisit
     vagrant
 
+    # minecraft
+    prismlauncher
+
     ];
   };
 
