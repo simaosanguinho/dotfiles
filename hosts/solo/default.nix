@@ -157,6 +157,7 @@
     vim
     wget
     curl
+    unzip
 
     # mvn workaround
     steam-run
