@@ -127,6 +127,14 @@
     # agisit
     vagrant
 
+    # csf
+    keepass
+    fcrackzip
+    john
+    toybox
+    rocmPackages_5.rocgdb
+
+
     # minecraft
     prismlauncher
 
@@ -167,9 +175,25 @@
     nixpkgs-fmt
 
     # dev
-    python3
     dconf
     nodejs
+
+    # ssof
+     zap
+
+    # sirs
+    openjdk11-bootstrap
+    maven
+    openssl
+
+
+    /* python3Packages.requests
+    python3Packages.beautifulsoup4 */
+    (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [
+      # select Python packages here
+      pandas
+      requests
+    ]))
   ];
 
   home-manager.users.sanguinho = { pkgs, ... }: {
