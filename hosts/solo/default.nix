@@ -190,7 +190,7 @@
     openssl
 
     # productivity
-    gnome.pomodoro
+    gnome-pomodoro
 
 
     /* python3Packages.requests
