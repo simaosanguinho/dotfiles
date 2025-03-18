@@ -48,7 +48,6 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Enable the Cinnamon Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
   services.xserver.desktopManager.cinnamon.enable = true;
 
   # Enable CUPS to print documents.
@@ -167,6 +166,9 @@
     wget
     curl
     unzip
+    libgcc
+    gnumake
+    gcc
 
     # mvn workaround
     steam-run
@@ -186,6 +188,9 @@
     openjdk11-bootstrap
     maven
     openssl
+
+    # productivity
+    gnome.pomodoro
 
 
     /* python3Packages.requests
