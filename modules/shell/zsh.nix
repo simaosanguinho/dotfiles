@@ -5,6 +5,7 @@
     enable = true;
     shellAliases = {
       u = "sudo nixos-rebuild switch";
+      up = "sudo nixos-rebuild switch --upgrade";
       cd = "z";
       ":q" = "exit";
     };

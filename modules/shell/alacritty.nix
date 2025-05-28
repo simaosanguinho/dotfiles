@@ -11,7 +11,7 @@
       };
       scrolling.multiplier = 5;
       selection.save_to_clipboard = true;
-      shell.program = "${pkgs.zsh}/bin/zsh";
+      terminal.shell.program = "${pkgs.zsh}/bin/zsh";
     };
   };
 }

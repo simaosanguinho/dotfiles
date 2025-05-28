@@ -5,10 +5,9 @@
 { config, pkgs, modules, inputs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -41,14 +40,25 @@
 
   # Configure console keymap
   console.keyMap = "pt-latin1";
-  services.xserver.enable = true;
-  services.xserver.xkb.layout = "pt";
+  /* services.xserver.enable = true;
+     services.xserver.xkb.layout = "pt";
+  */
 
   # Enable the Flakes feature and the accompanying new nix command-line tool
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Enable the Cinnamon Desktop Environment.
-  services.xserver.desktopManager.cinnamon.enable = true;
+  /* # Enable the Cinnamon Desktop Environment.
+     services.xserver.desktopManager.cinnamon.enable = true;
+  */
+
+  # Enable the X11 windowing system.
+  services.xserver = {
+    enable = true;
+    layout = "pt";
+    xkbVariant = "";
+    displayManager.defaultSession = "none+i3";
+    windowManager.i3 = { enable = true; };
+  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -79,64 +89,69 @@
     description = "sanguinho";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     openssh.authorizedKeys.keys = [
-	"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1lwuhiBZjUIzFikFCrzyp1jppOZSvlyc1/JZDvvqgD simao.sanguinho@gmail.com"
-  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILWB6jdzk/5YnfUDI7btHRVNg/hJ7IY85dOeK7xEzo19 simao.sanguinho@gmail.com"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC1lwuhiBZjUIzFikFCrzyp1jppOZSvlyc1/JZDvvqgD simao.sanguinho@gmail.com"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILWB6jdzk/5YnfUDI7btHRVNg/hJ7IY85dOeK7xEzo19 simao.sanguinho@gmail.com"
 
     ];
 
-  # List of packages installed in the user environment
-  packages = with pkgs; [
+    # List of packages installed in the user environment
+    packages = with pkgs; [
 
-    # developer
-    git
-    vscode
-    docker-compose
-    mysql80
+      # developer
+      git
+      docker-compose
+      mysql80
 
-    # media
-	  discord
-	  spotify
-    feh
-    flameshot
+      # media
+      discord
+      spotify
+      feh
+      flameshot
 
-    # misc
-    cowsay
-    file
-    which
-    tree
-    
-    # browsing
-    brave
-    
-    # dev tools
-    bat
-    neofetch
-    ripgrep
-    bat
-    glow
-    gnumake
-    tldr
-    fd
-    tmux
+      # misc
+      cowsay
+      file
+      which
+      tree
 
-    # system call monitoring
-    strace # system call monitoring
-    ltrace # library call monitoring
-    lsof # list open files
+      # browsing
+      brave
 
-    # agisit
-    vagrant
+      # dev tools
+      bat
+      neofetch
+      ripgrep
+      bat
+      glow
+      gnumake
+      tldr
+      fd
+      tmux
 
-    # csf
-    keepass
-    fcrackzip
-    john
-    toybox
-    rocmPackages_5.rocgdb
+      # system call monitoring
+      strace # system call monitoring
+      ltrace # library call monitoring
+      lsof # list open files
 
+      # system and graphical
+      i3lock-fancy
+      xfce.thunar
+      xfce.tumbler
+      arandr
+      zathura
 
-    # minecraft
-    prismlauncher
+      # agisit
+      vagrant
+
+      # csf
+      keepass
+      fcrackzip
+      john
+      toybox
+      rocmPackages_5.rocgdb
+
+      # minecraft
+      prismlauncher
 
     ];
   };
@@ -158,7 +173,6 @@
     openFirewall = true;
   };
 
-
   # List of packages installed in system profile.
   environment.systemPackages = with pkgs; [
     # core
@@ -169,6 +183,13 @@
     libgcc
     gnumake
     gcc
+    toybox
+    uutils-coreutils-noprefix
+    collabora-online
+    libreoffice
+    jetbrains.idea-community
+    vscode
+    code-cursor
 
     # mvn workaround
     steam-run
@@ -180,26 +201,31 @@
     # dev
     dconf
     nodejs
-
+    jdk21
     # ssof
-     zap
+    zap
 
     # sirs
     openjdk11-bootstrap
     maven
     openssl
 
+    #cpd 
+    mpi
+    mpich
+
     # productivity
     gnome-pomodoro
 
-
     /* python3Packages.requests
-    python3Packages.beautifulsoup4 */
-    (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [
-      # select Python packages here
-      pandas
-      requests
-    ]))
+       python3Packages.beautifulsoup4
+    */
+    (pkgs.python3.withPackages (python-pkgs:
+      with python-pkgs; [
+        # select Python packages here
+        pandas
+        requests
+      ]))
   ];
 
   home-manager.users.sanguinho = { pkgs, ... }: {
@@ -208,25 +234,26 @@
     home.stateVersion = "24.11";
 
     # Modules to import, available in the user's context.
-    imports = with modules;
-      [
-        # core
-        core.git
-        core.gitui
+    imports = with modules; [
+      # core
+      core.git
+      core.gitui
 
-        # shell
-        shell.zsh
-        shell.alacritty
-        shell.starship
-        shell.zoxide
+      # shell
+      shell.zsh
+      shell.alacritty
+      shell.starship
+      shell.zoxide
 
-        # graphical
-        graphical.feh
-        graphical.flameshot
+      # graphical
+      graphical.feh
+      graphical.flameshot
+      graphical.i3
 
-      ];
+    ];
   };
 
+  programs.nix-ld.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
